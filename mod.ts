@@ -1,4 +1,5 @@
 import { Application, send } from "https://deno.land/x/oak@v6.1.0/mod.ts";
+import api from "./api.ts";
 //import { send } from "https://deno.land/x/oak@v6.1.0/send.ts";
 
 const app = new Application();
@@ -17,6 +18,8 @@ app.use(async (ctx, next) => {
   ctx.response.headers.set("X-Response-Time", `${delta}ms`);
 });
 
+app.use(api.routes());
+
 app.use(async (ctx) => {
   const filePath = ctx.request.url.pathname;
   const fileWhitelist = [
@@ -30,11 +33,6 @@ app.use(async (ctx) => {
       root: `${Deno.cwd()}/public`,
     });
   }
-});
-
-app.use(async (ctx, next) => {
-  ctx.response.body = `Hello NASA`;
-  await next();
 });
 
 if (import.meta.main) {
