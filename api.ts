@@ -1,5 +1,5 @@
 import { Router } from "https://deno.land/x/oak@v6.1.0/mod.ts";
-import * as planets from "./models/planets.ts"
+import * as planets from "./models/planets.ts";
 //creating new object by creating instance of router class
 const router = new Router();
 
@@ -13,7 +13,8 @@ router.get("/", (ctx) => {
 });
 
 router.get("/planets", (ctx) => {
-    ctx.response.body = planets.getAllPlanets();
-})
+  throw new Error("Sample Error");
+  ctx.response.body = planets.getAllPlanets();
+});
 
 export default router;

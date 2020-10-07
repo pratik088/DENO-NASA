@@ -37,11 +37,11 @@ async function loadPlenetData() {
   });
 
   //for await (const dirEntry of Deno.readDir(".")) {
-  //    console.log(dirEntry.name);
+  //    log.info(dirEntry.name);
   //  }
 
   Deno.close(file.rid);
-  const planets = filterHabitablePlanets (result as Array<Planet>);
+  const planets = filterHabitablePlanets(result as Array<Planet>);
   return planets.map((planet) => {
     return pick(planet, [
       "koi_prad",
@@ -55,7 +55,7 @@ async function loadPlenetData() {
 }
 
 planets = await loadPlenetData();
-console.log(`${planets.length} habitable planets found`);
+log.info(`${planets.length} habitable planets found`);
 
 export function getAllPlanets() {
   return planets;

@@ -13,7 +13,7 @@ const HABITABLE_PLANET = {
 };
 
 const NOT_CONFIRMED = {
-    koi_disposition: "FALSE POSITIVE",
+  koi_disposition: "FALSE POSITIVE",
 };
 
 const TOO_LARGE_PLANETARY_RADIUS = {
@@ -57,7 +57,7 @@ Deno.test("Short Example", () => {
     },
     {
       runtime: "node",
-    }
+    },
   );
 });
 
@@ -74,7 +74,7 @@ Deno.test({
       },
       {
         runtime: "node",
-      }
+      },
     );
   },
 });
@@ -83,7 +83,7 @@ Deno.test({
 //   name: "ops leak",
 //   sanitizeOps: false,
 //   fn() {
-//     setTimeout(console.log, 1000);
+//     setTimeout(log.info, 1000);
 //   },
 // });
 
