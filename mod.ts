@@ -19,6 +19,7 @@ await log.setup({
   },
 });
 
+//Error Handling Event Listner
 app.addEventListener("error" , (event) => {
   log.error(event.error);
 });
