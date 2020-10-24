@@ -1,5 +1,4 @@
-import * as log from "https://deno.land/std/log/mod.ts";
-import * as _ from "https://deno.land/x/lodash@4.17.15-es/lodash.js";
+import { log, flatMap } from "../deps.ts";
 
 interface Launch {
   flightNumber: number;
@@ -28,7 +27,7 @@ async function downloadLaunchData() {
   const launchData = await response.json();
   for (const launch of launchData) {
     const payloads = launch["rocket"]["second_stage"]["payloads"];
-    const customers = _.flatMap(payloads, (payload: any) => {
+    const customers = flatMap(payloads, (payload: any) => {
       return payload["customers"];
     });
 
@@ -43,11 +42,38 @@ async function downloadLaunchData() {
     };
 
     launches.set(flightData.flightNumber, flightData);
-
-    log.info(JSON.stringify(flightData));
   }
 }
 
-  await downloadLaunchData();
-  log.info(`Downloaded data for ${launches.size} SpaceX launches.`);
+await downloadLaunchData();
+log.info(`Downloaded data for ${launches.size} SpaceX launches.`);
 
+export function getAll() {
+  return Array.from(launches.values());
+}
+
+export function getOne(id: number) {
+  if (launches.has(id)) {
+    return launches.get(id);
+  }
+  return null;
+}
+
+export function removeOne(id: number) {
+  const aborted = launches.get(id);
+  if (aborted) {
+    aborted.upcoming = false;
+    aborted.success = false;
+  }
+  return aborted;
+}
+
+export function addOne(data: Launch) {
+  launches.set(
+    data.flightNumber,
+    Object.assign(data, {
+      upcoming: true,
+      customers: ["Zero to Mastery", "NASA"],
+    }),
+  );
+}

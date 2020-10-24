@@ -1,10 +1,9 @@
-import * as log from "https://deno.land/std@0.71.0/log/mod.ts";
+import { log, Application, send } from "./deps.ts";
 
-import { Application, send } from "https://deno.land/x/oak@v6.1.0/mod.ts";
 import api from "./api.ts";
-//import { send } from "https://deno.land/x/oak@v6.1.0/send.ts";
 
 const app = new Application();
+
 const PORT = 8000;
 
 await log.setup({
@@ -19,27 +18,23 @@ await log.setup({
   },
 });
 
-//Error Handling Event Listner
-app.addEventListener("error" , (event) => {
+app.addEventListener("error", (event) => {
   log.error(event.error);
 });
 
 app.use(async (ctx, next) => {
-  await next();
-  try{
+  try {
     await next();
-  }
-  catch (err){
-    log.error(err);
-    ctx.response.body = "Internal Server Error";
-    throw err; 
+  } catch (err) {
+    ctx.response.body = "Internal server error";
+    throw err;
   }
 });
 
-app.use(async (ctx, next) => {
+app.use(async function(ctx, next) {
   await next();
   const time = ctx.response.headers.get("X-Response-Time");
-  log.info(`${ctx.request.method} ${ctx.request.url} : ${time}`);
+  log.info(`${ctx.request.method} ${ctx.request.url}: ${time}`);
 });
 
 app.use(async (ctx, next) => {
@@ -68,7 +63,7 @@ app.use(async (ctx) => {
 });
 
 if (import.meta.main) {
-  log.info(`Starting server on port ${PORT}....`)
+  log.info(`Starting server on port ${PORT}...`);
   await app.listen({
     port: PORT,
   });
